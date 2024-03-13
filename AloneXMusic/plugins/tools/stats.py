@@ -1,3 +1,4 @@
+import asyncio
 import platform
 from sys import version as pyver
 
@@ -5,21 +6,60 @@ import psutil
 from pyrogram import __version__ as pyrover
 from pyrogram import filters
 from pyrogram.errors import MessageIdInvalid
-from pyrogram.types import InputMediaPhoto, Message
+from pyrogram.types import CallbackQuery, InputMediaPhoto, Message
 from pytgcalls.__version__ import __version__ as pytgver
 
 import config
-from AloneXMusic import app
+from config import BANNED_USERS, MUSIC_BOT_NAME
+from strings import get_command
+from AloneXMusic import YouTube, app
 from AloneXMusic.core.userbot import assistants
-from AloneXMusic.misc import SUDOERS, mongodb
+from AloneXMusic.misc import SUDOERS, pymongodb
 from AloneXMusic.plugins import ALL_MODULES
-from AloneXMusic.utils.database import get_served_chats, get_served_users, get_sudoers
+from AloneXMusic.utils.database import (get_global_tops,
+                                       get_particulars, get_queries,
+                                       get_served_chats,
+                                       get_served_users, get_sudoers,
+                                       get_top_chats, get_topp_users)
 from AloneXMusic.utils.decorators.language import language, languageCB
-from AloneXMusic.utils.inline.stats import back_stats_buttons, stats_buttons
-from config import BANNED_USERS
+from AloneXMusic.utils.inline.stats import (back_stats_buttons,
+                                           back_stats_markup,
+                                           get_stats_markup,
+                                           overallback_stats_markup,
+                                           stats_buttons,
+                                           top_ten_stats_markup)
+
+loop = asyncio.get_running_loop()
+
+# Commands
+GSTATS_COMMAND = get_command("GSTATS_COMMAND")
+STATS_COMMAND = get_command("STATS_COMMAND")
 
 
-@app.on_message(filters.command(["stats", "gstats"]) & filters.group & ~BANNED_USERS)
+@app.on_message(
+    filters.command(STATS_COMMAND)
+    & filters.group
+    & ~filters.edited
+    & ~BANNED_USERS
+)
+@language
+async def stats_global(client, message: Message, _):
+    upl = stats_buttons(
+        _, True if message.from_user.id in SUDOERS else False
+    )
+    await message.reply_photo(
+        photo=config.STATS_IMG_URL,
+        caption=_["gstats_11"].format(config.MUSIC_BOT_NAME),
+        reply_markup=upl,
+    )
+
+
+@app.on_message(
+    filters.command(GSTATS_COMMAND)
+    & filters.group
+    & ~filters.edited
+    & ~BANNED_USERS
+)
 @language
 async def stats_global(client, message: Message, _):
     upl = stats_buttons(_, True if message.from_user.id in SUDOERS else False)
