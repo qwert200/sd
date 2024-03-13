@@ -10,7 +10,6 @@ from AloneXMusic.misc import db
 from AloneXMusic.utils.database import get_loop
 from AloneXMusic.utils.decorators import AdminRightsCheck
 from AloneXMusic.utils.stream.autoclear import auto_clean
-from AloneXMusic.utils.thumbnails import gen_thumb
 
 # Commands
 SKIP_COMMAND = get_command("SKIP_COMMAND")
