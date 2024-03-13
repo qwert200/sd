@@ -2,19 +2,28 @@ from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, Message
 
 import config
+from config import BANNED_USERS
+from strings import get_command
 from AloneXMusic import YouTube, app
 from AloneXMusic.core.call import Alone
 from AloneXMusic.misc import db
 from AloneXMusic.utils.database import get_loop
 from AloneXMusic.utils.decorators import AdminRightsCheck
-from AloneXMusic.utils.inline import close_markup, stream_markup
+from AloneXMusic.utils.inline.play import (stream_markup,
+                                          telegram_markup,
+                                          close_keyboard)
 from AloneXMusic.utils.stream.autoclear import auto_clean
-from AloneXMusic.utils.thumbnails import get_thumb
-from config import BANNED_USERS
+from AloneXMusic.utils.thumbnails import gen_thumb
+
+# Commands
+SKIP_COMMAND = get_command("SKIP_COMMAND")
 
 
 @app.on_message(
-    filters.command(["skip", "cskip", "next", "cnext"]) & filters.group & ~BANNED_USERS
+    filters.command(SKIP_COMMAND)
+    & filters.group
+    & ~filters.edited
+    & ~BANNED_USERS
 )
 @AdminRightsCheck
 async def skip(cli, message: Message, _, chat_id):
