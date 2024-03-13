@@ -4,7 +4,7 @@ from pyrogram.types import Message
 from config import BANNED_USERS
 from strings import get_command
 from AloneXMusic import app
-from AloneX.core.call import Alone
+from AloneXMusic.core.call import Alone
 from AloneXMusic.utils.database import set_loop
 from AloneXMusic.utils.decorators import AdminRightsCheck
 
