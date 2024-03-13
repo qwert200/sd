@@ -1,14 +1,23 @@
 from pyrogram import filters
 from pyrogram.types import Message
 
+from config import BANNED_USERS
+from strings import get_command
 from AloneXMusic import app
 from AloneXMusic.misc import SUDOERS
-from AloneXMusic.utils.database import blacklist_chat, blacklisted_chats, whitelist_chat
+from AloneXMusic.utils.database import (blacklist_chat,
+                                       blacklisted_chats,
+                                       whitelist_chat)
 from AloneXMusic.utils.decorators.language import language
-from config import BANNED_USERS
+
+# Commands
+
+BLACKLISTCHAT_COMMAND = get_command("BLACKLISTCHAT_COMMAND")
+WHITELISTCHAT_COMMAND = get_command("WHITELISTCHAT_COMMAND")
+BLACKLISTEDCHAT_COMMAND = get_command("BLACKLISTEDCHAT_COMMAND")
 
 
-@app.on_message(filters.command(["blchat", "blacklistchat"]) & SUDOERS)
+@app.on_message(filters.command(BLACKLISTCHAT_COMMAND) & SUDOERS)
 @language
 async def blacklist_chat_func(client, message: Message, _):
     if len(message.command) != 2:
@@ -27,9 +36,7 @@ async def blacklist_chat_func(client, message: Message, _):
         pass
 
 
-@app.on_message(
-    filters.command(["whitelistchat", "unblacklistchat", "unblchat"]) & SUDOERS
-)
+@app.on_message(filters.command(WHITELISTCHAT_COMMAND) & SUDOERS)
 @language
 async def white_funciton(client, message: Message, _):
     if len(message.command) != 2:
@@ -43,7 +50,9 @@ async def white_funciton(client, message: Message, _):
     await message.reply_text(_["black_9"])
 
 
-@app.on_message(filters.command(["blchats", "blacklistedchats"]) & ~BANNED_USERS)
+@app.on_message(
+    filters.command(BLACKLISTEDCHAT_COMMAND) & ~BANNED_USERS
+)
 @language
 async def all_chats(client, message: Message, _):
     text = _["black_7"]
