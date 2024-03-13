@@ -1,26 +1,30 @@
 import asyncio
+import time
 
 from pyrogram import filters
 from pyrogram.errors import FloodWait
 from pyrogram.types import Message
 
+from config import BANNED_USERS
+from strings import get_command
 from AloneXMusic import app
 from AloneXMusic.misc import SUDOERS
 from AloneXMusic.utils import get_readable_time
-from AloneXMusic.utils.database import (
-    add_banned_user,
-    get_banned_count,
-    get_banned_users,
-    get_served_chats,
-    is_banned_user,
-    remove_banned_user,
-)
+from AloneXMusic.utils.database import (add_banned_user,
+                                       get_banned_count,
+                                       get_banned_users,
+                                       get_served_chats,
+                                       is_banned_user,
+                                       remove_banned_user)
 from AloneXMusic.utils.decorators.language import language
-from AloneXMusic.utils.extraction import extract_user
-from config import BANNED_USERS
+
+# Command
+GBAN_COMMAND = get_command("GBAN_COMMAND")
+UNGBAN_COMMAND = get_command("UNGBAN_COMMAND")
+GBANNED_COMMAND = get_command("GBANNED_COMMAND")
 
 
-@app.on_message(filters.command(["gban", "globalban"]) & SUDOERS)
+@app.on_message(filters.command(GBAN_COMMAND) & SUDOERS)
 @language
 async def global_ban(client, message: Message, _):
     if not message.reply_to_message:
@@ -68,7 +72,7 @@ async def global_ban(client, message: Message, _):
     await mystic.delete()
 
 
-@app.on_message(filters.command(["ungban"]) & SUDOERS)
+@app.on_message(filters.command(UNGBAN_COMMAND) & SUDOERS)
 @language
 async def global_un(client, message: Message, _):
     if not message.reply_to_message:
@@ -100,7 +104,7 @@ async def global_un(client, message: Message, _):
     await mystic.delete()
 
 
-@app.on_message(filters.command(["gbannedusers", "gbanlist"]) & SUDOERS)
+@app.on_message(filters.command(GBANNED_COMMAND) & SUDOERS)
 @language
 async def gbanned_list(client, message: Message, _):
     counts = await get_banned_count()
