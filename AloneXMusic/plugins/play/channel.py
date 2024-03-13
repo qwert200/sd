@@ -1,14 +1,22 @@
 from pyrogram import filters
-from pyrogram.enums import ChatMembersFilter, ChatMemberStatus, ChatType
 from pyrogram.types import Message
 
+from config import BANNED_USERS
+from strings import get_command
 from AloneXMusic import app
 from AloneXMusic.utils.database import set_cmode
 from AloneXMusic.utils.decorators.admins import AdminActual
-from config import BANNED_USERS
+
+### Multi-Lang Commands
+CHANNELPLAY_COMMAND = get_command("CHANNELPLAY_COMMAND")
 
 
-@app.on_message(filters.command(["channelplay"]) & filters.group & ~BANNED_USERS)
+@app.on_message(
+    filters.command(CHANNELPLAY_COMMAND)
+    & filters.group
+    & ~filters.edited
+    & ~BANNED_USERS
+)
 @AdminActual
 async def playmode_(client, message: Message, _):
     if len(message.command) < 2:
