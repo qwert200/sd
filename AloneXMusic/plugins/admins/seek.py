@@ -1,17 +1,21 @@
 from pyrogram import filters
 from pyrogram.types import Message
 
+from config import BANNED_USERS
+from strings import get_command
 from AloneXMusic import YouTube, app
 from AloneXMusic.core.call import Alone
 from AloneXMusic.misc import db
 from AloneXMusic.utils import AdminRightsCheck, seconds_to_min
-from AloneXMusic.utils.inline import close_markup
-from config import BANNED_USERS
+
+# Commands
+SEEK_COMMAND = get_command("SEEK_COMMAND")
 
 
 @app.on_message(
-    filters.command(["seek", "cseek", "seekback", "cseekback"])
+    filters.command(SEEK_COMMAND)
     & filters.group
+    & ~filters.edited
     & ~BANNED_USERS
 )
 @AdminRightsCheck
