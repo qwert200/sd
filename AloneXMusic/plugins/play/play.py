@@ -1,44 +1,40 @@
 import random
+imporimport random
 import string
+from ast import ExceptHandler
 
 from pyrogram import filters
-from pyrogram.types import InlineKeyboardMarkup, InputMediaPhoto, Message
+from pyrogram.types import (InlineKeyboardMarkup, InputMediaPhoto,
+                            Message)
 from pytgcalls.exceptions import NoActiveGroupCall
 
 import config
-from AloneXMusic import Apple, Resso, SoundCloud, Spotify, Telegram, YouTube, app
+from config import BANNED_USERS, lyrical
+from strings import get_command
+from AloneXMusic import (Apple, Resso, SoundCloud, Spotify, Telegram,
+                        YouTube, app)
 from AloneXMusic.core.call import Alone
 from AloneXMusic.utils import seconds_to_min, time_to_seconds
-from AloneXMusic.utils.channelplay import get_channeplayCB
+from AloneX.utils.channelplay import get_channeplayCB
+from AloneXMusic.utils.database import is_video_allowed
 from AloneXMusic.utils.decorators.language import languageCB
 from AloneXMusic.utils.decorators.play import PlayWrapper
 from AloneXMusic.utils.formatters import formats
-from AloneXMusic.utils.inline import (
-    botplaylist_markup,
-    livestream_markup,
-    playlist_markup,
-    slider_markup,
-    track_markup,
-)
+from AloneXMusic.utils.inline.play import (livestream_markup,
+                                          playlist_markup,
+                                          slider_markup, track_markup)
+from AloneXMusic.utils.inline.playlist import botplaylist_markup
 from AloneXMusic.utils.logger import play_logs
 from AloneXMusic.utils.stream.stream import stream
-from config import BANNED_USERS, lyrical
+
+# Command
+PLAY_COMMAND = get_command("PLAY_COMMAND")
 
 
 @app.on_message(
-    filters.command(
-        [
-            "play",
-            "vplay",
-            "cplay",
-            "cvplay",
-            "playforce",
-            "vplayforce",
-            "cplayforce",
-            "cvplayforce",
-        ]
-    )
+    filters.command(PLAY_COMMAND)
     & filters.group
+    & ~filters.edited
     & ~BANNED_USERS
 )
 @PlayWrapper
