@@ -1,15 +1,32 @@
 import os
-import asyncio
+import re
+
 import yt_dlp
-import requests
-
-from ... import app
+from pykeyboard import InlineKeyboard
 from pyrogram import filters
-from pyrogram.types import Message
-from youtubesearchpython import VideosSearch
+from pyrogram.types import (InlineKeyboardButton,
+                            InlineKeyboardMarkup, InputMediaAudio,
+                            InputMediaVideo, Message)
+
+from config import (BANNED_USERS, SONG_DOWNLOAD_DURATION,
+                    SONG_DOWNLOAD_DURATION_LIMIT)
+from strings import get_command
+from AloneXMusic import YouTube, app
+from AloneXMusic.utils.decorators.language import language, languageCB
+from AloneXMusic.utils.formatters import convert_bytes
+from AloneXMusic.utils.inline.song import song_markup
+
+# Command
+SONG_COMMAND = get_command("SONG_COMMAND")
 
 
-@app.on_message(filters.command(["song"], ["/", "!", "."]))
+# Song Module
+
+
+@app.on_message(
+    filters.command(SONG_COMMAND)
+)
+@language
 async def song(client: app, message: Message):
     aux = await message.reply_text("🔄 𝐏𝐫𝐨𝐜𝐞𝐬𝐬𝐢𝐧𝐠 ...")
     if len(message.command) < 2:
