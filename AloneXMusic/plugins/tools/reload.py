@@ -6,6 +6,7 @@ from pyrogram.enums import ChatMembersFilter
 from pyrogram.types import CallbackQuery, Message
 
 from AloneXMusic import app
+from strings import get_command
 from AloneXMusic.core.call import Alone
 from AloneXMusic.misc import db
 from AloneXMusic.utils.database import get_assistant, get_authuser_names, get_cmode
@@ -16,8 +17,15 @@ from config import BANNED_USERS, adminlist, lyrical
 rel = {}
 
 
+### Multi-Lang Commands
+RELOAD_COMMAND = get_command("RELOAD_COMMAND")
+RESTART_COMMAND = get_command("RESTART_COMMAND")
+
 @app.on_message(
-    filters.command(["admincache", "reload", "refresh"]) & filters.group & ~BANNED_USERS
+    filters.command(RELOAD_COMMAND)
+    & filters.group
+    & ~filters.edited
+    & ~BANNED_USERS
 )
 @language
 async def reload_admin_cache(client, message: Message, _):
@@ -46,7 +54,12 @@ async def reload_admin_cache(client, message: Message, _):
         await message.reply_text(_["reload_3"])
 
 
-@app.on_message(filters.command(["reboot"]) & filters.group & ~BANNED_USERS)
+@app.on_message(
+    filters.command(RESTART_COMMAND)
+    & filters.group
+    & ~filters.edited
+    & ~BANNED_USERS
+)
 @AdminActual
 async def restartbot(client, message: Message, _):
     mystic = await message.reply_text(_["reload_4"].format(app.mention))
