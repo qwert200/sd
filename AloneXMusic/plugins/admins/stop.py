@@ -7,7 +7,6 @@ from AloneXMusic import app
 from AloneX.core.call import Alone
 from AloneXMusic.utils.database import set_loop
 from AloneXMusic.utils.decorators import AdminRightsCheck
-from AloneXMusic.utils.inline.play import close_keyboard
 
 # Commands
 STOP_COMMAND = get_command("STOP_COMMAND")
