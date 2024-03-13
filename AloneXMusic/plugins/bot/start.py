@@ -1,32 +1,40 @@
+import asyncio
 import time
-import random
 
 from pyrogram import filters
-from pyrogram.enums import ChatType
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
+from pyrogram.types import (InlineKeyboardButton,
+                            InlineKeyboardMarkup, Message)
 from youtubesearchpython.__future__ import VideosSearch
 
 import config
-from config import START_IMG_URL
-from AloneXMusic import app
-from AloneXMusic.misc import _boot_
-from AloneXMusic.plugins.sudo.sudoers import sudoers_list
-from AloneXMusic.utils.database import (
-    add_served_chat,
-    add_served_user,
-    blacklisted_chats,
-    get_lang,
-    is_banned_user,
-    is_on_off,
-)
+from config import BANNED_USERS, OWNER_ID, MUSIC_BOT_NAME
+from strings import get_command, get_string
+from AloneXMusic import Telegram, YouTube, app
+from AloneXMusic.misc import SUDOERS, _boot_
+from AloneXMusic.plugins.playlist import del_plist_msg
+from AloneXMusic.plugins.sudoers import sudoers_list
+from AloneXMusic.utils.database import (add_served_chat,
+                                       add_served_user,
+                                       get_served_chats,
+                                       get_served_users,
+                                       blacklisted_chats,
+                                       get_assistant, get_lang,
+                                       get_userss, is_on_off,
+                                       is_served_private_chat)
 from AloneXMusic.utils.decorators.language import LanguageStart
 from AloneXMusic.utils.formatters import get_readable_time
-from AloneXMusic.utils.inline import help_pannel, private_panel, start_panel
-from config import BANNED_USERS
-from strings import get_string
+from AloneXMusic.utils.inline import (help_pannel, private_panel,
+                                     start_pannel)
+
+loop = asyncio.get_running_loop()
 
 
-@app.on_message(filters.command(["start"]) & filters.private & ~BANNED_USERS)
+@app.on_message(
+    filters.command(get_command("START_COMMAND"))
+    & filters.private
+    & ~filters.edited
+    & ~BANNED_USERS
+)
 @LanguageStart
 async def start_pm(client, message: Message, _):
     await add_served_user(message.from_user.id)
