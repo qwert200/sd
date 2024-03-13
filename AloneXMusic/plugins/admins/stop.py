@@ -1,16 +1,23 @@
 from pyrogram import filters
 from pyrogram.types import Message
 
+from config import BANNED_USERS
+from strings import get_command
 from AloneXMusic import app
-from AloneXMusic.core.call import Alone
+from AloneX.core.call import Alone
 from AloneXMusic.utils.database import set_loop
 from AloneXMusic.utils.decorators import AdminRightsCheck
-from AloneXMusic.utils.inline import close_markup
-from config import BANNED_USERS
+from AloneXMusic.utils.inline.play import close_keyboard
+
+# Commands
+STOP_COMMAND = get_command("STOP_COMMAND")
 
 
 @app.on_message(
-    filters.command(["end", "stop", "cend", "cstop"]) & filters.group & ~BANNED_USERS
+    filters.command(STOP_COMMAND)
+    & filters.group
+    & ~filters.edited
+    & ~BANNED_USERS
 )
 @AdminRightsCheck
 async def stop_music(cli, message: Message, _, chat_id):
