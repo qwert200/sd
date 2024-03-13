@@ -1,46 +1,44 @@
 from pyrogram import filters
-from pyrogram.enums import ChatType
 from pyrogram.errors import MessageNotModified
-from pyrogram.types import (
-    CallbackQuery,
-    InlineKeyboardButton,
-    InlineKeyboardMarkup,
-    InputMediaPhoto,
-    InputMediaVideo,
-    Message,
-)
+from pyrogram.types import (CallbackQuery, InlineKeyboardButton,
+                            InlineKeyboardMarkup, Message)
 
+from config import (BANNED_USERS, CLEANMODE_DELETE_MINS,
+                    MUSIC_BOT_NAME, OWNER_ID)
+from strings import get_command
 from AloneXMusic import app
-from AloneXMusic.utils.database import (
-    add_nonadmin_chat,
-    get_authuser,
-    get_authuser_names,
-    get_playmode,
-    get_playtype,
-    get_upvote_count,
-    is_nonadmin_chat,
-    is_skipmode,
-    remove_nonadmin_chat,
-    set_playmode,
-    set_playtype,
-    set_upvotes,
-    skip_off,
-    skip_on,
-)
+from AloneXMusic.utils.database import (add_nonadmin_chat,
+                                       cleanmode_off, cleanmode_on,
+                                       commanddelete_off,
+                                       commanddelete_on,
+                                       get_aud_bit_name, get_authuser,
+                                       get_authuser_names,
+                                       get_playmode, get_playtype,
+                                       get_vid_bit_name,
+                                       is_cleanmode_on,
+                                       is_commanddelete_on,
+                                       is_nonadmin_chat,
+                                       remove_nonadmin_chat,
+                                       save_audio_bitrate,
+                                       save_video_bitrate,
+                                       set_playmode, set_playtype)
 from AloneXMusic.utils.decorators.admins import ActualAdminCB
 from AloneXMusic.utils.decorators.language import language, languageCB
 from AloneXMusic.utils.inline.settings import (
-    auth_users_markup,
-    playmode_users_markup,
-    setting_markup,
-    vote_mode_markup,
-)
+    audio_quality_markup, auth_users_markup,
+    cleanmode_settings_markup, playmode_users_markup, setting_markup,
+    video_quality_markup)
 from AloneXMusic.utils.inline.start import private_panel
-from config import BANNED_USERS, OWNER_ID
+
+### Command
+SETTINGS_COMMAND = get_command("SETTINGS_COMMAND")
 
 
 @app.on_message(
-    filters.command(["settings", "setting"]) & filters.group & ~BANNED_USERS
+    filters.command(SETTINGS_COMMAND)
+    & filters.group
+    & ~filters.edited
+    & ~BANNED_USERS
 )
 @language
 async def settings_mar(client, message: Message, _):
