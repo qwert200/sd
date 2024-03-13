@@ -1,21 +1,27 @@
 import asyncio
 import os
+from random import randint
 
 from pyrogram import filters
 from pyrogram.errors import FloodWait
 from pyrogram.types import CallbackQuery, InputMediaPhoto, Message
 
 import config
+from config import BANNED_USERS
+from strings import get_command
 from AloneXMusic import app
 from AloneXMusic.misc import db
-from AloneXMusic.utils import AloneBin, get_channeplayCB, seconds_to_min
-from AloneXMusic.utils.database import get_cmode, is_active_chat, is_music_playing
+from AloneXMusic.utils import (AloneBin, get_channeplayCB,
+                              seconds_to_min)
+from AloneXMusic.utils.database import (get_cmode, is_active_chat,
+                                       is_music_playing)
 from AloneXMusic.utils.decorators.language import language, languageCB
 from AloneXMusic.utils.inline import queue_back_markup, queue_markup
-from config import BANNED_USERS
+
+###Commands
+QUEUE_COMMAND = get_command("QUEUE_COMMAND")
 
 basic = {}
-
 
 def get_image(videoid):
     if os.path.isfile(f"cache/{videoid}.png"):
@@ -36,9 +42,7 @@ def get_duration(playing):
 
 
 @app.on_message(
-    filters.command(["queue", "cqueue", "player", "cplayer", "playing", "cplaying"])
-    & filters.group
-    & ~BANNED_USERS
+    filters.command(QUEUE_COMMAND) & filters.group & ~BANNED_USERS
 )
 @language
 async def get_queue(client, message: Message, _):
