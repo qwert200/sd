@@ -1,12 +1,17 @@
 from pyrogram import filters
 
+import config
+from strings import get_command
 from AloneXMusic import app
 from AloneXMusic.misc import SUDOERS
 from AloneXMusic.utils.database import add_off, add_on
 from AloneXMusic.utils.decorators.language import language
 
+# Commands
+LOGGER_COMMAND = get_command("LOGGER_COMMAND")
 
-@app.on_message(filters.command(["logger"]) & SUDOERS)
+
+@app.on_message(filters.command(LOGGER_COMMAND) & SUDOERS)
 @language
 async def logger(client, message, _):
     usage = _["log_1"]
