@@ -1,20 +1,28 @@
 from pyrogram import filters
+from pyrogram import filters
 from pyrogram.types import Message
 
-from AloneXMusic import app
-from AloneXMusic.utils import extract_user, int_to_alpha
-from AloneXMusic.utils.database import (
-    delete_authuser,
-    get_authuser,
-    get_authuser_names,
-    save_authuser,
-)
-from AloneXMusic.utils.decorators import AdminActual, language
-from AloneXMusic.utils.inline import close_markup
 from config import BANNED_USERS, adminlist
+from strings import get_command
+from AloneXMusic import app
+from AloneXMusic.utils.database import (delete_authuser, get_authuser,
+                                       get_authuser_names,
+                                       save_authuser)
+from AloneXMusic.utils.decorators import AdminActual
+from AloneXMusic.utils.formatters import int_to_alpha
+
+# Command
+AUTH_COMMAND = get_command("AUTH_COMMAND")
+UNAUTH_COMMAND = get_command("UNAUTH_COMMAND")
+AUTHUSERS_COMMAND = get_command("AUTHUSERS_COMMAND")
 
 
-@app.on_message(filters.command("auth") & filters.group & ~BANNED_USERS)
+@app.on_message(
+    filters.command(AUTH_COMMAND)
+    & filters.group
+    & ~filters.edited
+    & ~BANNED_USERS
+)
 @AdminActual
 async def auth(client, message: Message, _):
     if not message.reply_to_message:
@@ -43,7 +51,12 @@ async def auth(client, message: Message, _):
         return await message.reply_text(_["auth_3"].format(user.mention))
 
 
-@app.on_message(filters.command("unauth") & filters.group & ~BANNED_USERS)
+@app.on_message(
+    filters.command(UNAUTH_COMMAND)
+    & filters.group
+    & ~filters.edited
+    & ~BANNED_USERS
+)
 @AdminActual
 async def unauthusers(client, message: Message, _):
     if not message.reply_to_message:
@@ -63,7 +76,10 @@ async def unauthusers(client, message: Message, _):
 
 
 @app.on_message(
-    filters.command(["authlist", "authusers"]) & filters.group & ~BANNED_USERS
+    filters.command(AUTHUSERS_COMMAND)
+    & filters.group
+    & ~filters.edited
+    & ~BANNED_USERS
 )
 @language
 async def authusers(client, message: Message, _):
