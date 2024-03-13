@@ -9,7 +9,6 @@ from strings import get_command, get_string, helpers
 from AloneXMusic import app
 from AloneXMusic.misc import SUDOERS
 from AloneXMusic.utils import help_pannel
-from AloneXMusic.utils.database import get_lang, is_commanddelete_on
 from AloneXMusic.utils.decorators.language import (LanguageStart,
                                                   languageCB)
 from AloneXMusic.utils.inline.help import (help_back_markup,
