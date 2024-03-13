@@ -1,18 +1,23 @@
 from datetime import datetime
-import random
 
 from pyrogram import filters
 from pyrogram.types import Message
 
+from config import BANNED_USERS, MUSIC_BOT_NAME, PING_IMG_URL
+from strings import get_command
 from AloneXMusic import app
 from AloneXMusic.core.call import Alone
 from AloneXMusic.utils import bot_sys_stats
 from AloneXMusic.utils.decorators.language import language
-from AloneXMusic.utils.inline import supp_markup
-from config import BANNED_USERS, PING_IMG_URL
+from AloneXMusic.utils.inline.play import close_keyboard
+
+### Commands
+PING_COMMAND = get_command("PING_COMMAND")
 
 
-@app.on_message(filters.command(["ping", "alive"]) & ~BANNED_USERS)
+@app.on_message(
+    filters.command(PING_COMMAND)
+)
 @language
 async def ping_com(client, message: Message, _):
     start = datetime.now()
