@@ -1,12 +1,13 @@
 import asyncio
-
 import speedtest
 from pyrogram import filters
-from pyrogram.types import Message
+from strings import get_command
+from AloneX import app
+from AloneX.misc import SUDOERS
 
-from AloneXMusic import app
-from AloneXMusic.misc import SUDOERS
-from AloneXMusic.utils.decorators.language import language
+# Commands
+SPEEDTEST_COMMAND = get_command("SPEEDTEST_COMMAND")
+
 
 
 def testspeed(m, _):
@@ -25,8 +26,7 @@ def testspeed(m, _):
     return result
 
 
-@app.on_message(filters.command(["speedtest", "spt"]) & SUDOERS)
-@language
+@app.on_message(filters.command(SPEEDTEST_COMMAND) & SUDOERS)
 async def speedtest_function(client, message: Message, _):
     m = await message.reply_text(_["server_11"])
     loop = asyncio.get_event_loop()
