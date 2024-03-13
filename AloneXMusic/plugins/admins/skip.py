@@ -9,9 +9,6 @@ from AloneXMusic.core.call import Alone
 from AloneXMusic.misc import db
 from AloneXMusic.utils.database import get_loop
 from AloneXMusic.utils.decorators import AdminRightsCheck
-from AloneXMusic.utils.inline.play import (stream_markup,
-                                          telegram_markup,
-                                          close_keyboard)
 from AloneXMusic.utils.stream.autoclear import auto_clean
 from AloneXMusic.utils.thumbnails import gen_thumb
 
