@@ -3,16 +3,28 @@ from typing import Union
 from pyrogram import filters, types
 from pyrogram.types import InlineKeyboardMarkup, Message
 
+import config
+from config import BANNED_USERS
+from strings import get_command, get_string, helpers
 from AloneXMusic import app
+from AloneXMusic.misc import SUDOERS
 from AloneXMusic.utils import help_pannel
-from AloneXMusic.utils.database import get_lang
-from AloneXMusic.utils.decorators.language import LanguageStart, languageCB
-from AloneXMusic.utils.inline.help import help_back_markup, private_help_panel
-from config import BANNED_USERS, START_IMG_URL, SUPPORT_CHAT
-from strings import get_string, helpers
+from AloneXMusic.utils.database import get_lang, is_commanddelete_on
+from AloneXMusic.utils.decorators.language import (LanguageStart,
+                                                  languageCB)
+from AloneXMusic.utils.inline.help import (help_back_markup,
+                                          private_help_panel)
+
+### Command
+HELP_COMMAND = get_command("HELP_COMMAND")
 
 
-@app.on_message(filters.command(["help"]) & filters.private & ~BANNED_USERS)
+@app.on_message(
+    filters.command(HELP_COMMAND)
+    & filters.private
+    & ~filters.edited
+    & ~BANNED_USERS
+)
 @app.on_callback_query(filters.regex("settings_back_helper") & ~BANNED_USERS)
 async def helper_private(
     client: app, update: Union[types.Message, types.CallbackQuery]
