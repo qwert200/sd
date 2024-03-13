@@ -3,10 +3,10 @@ from pyrogram.types import Message
 
 from config import BANNED_USERS
 from strings import get_command
-from AloneX import app
-from AloneX.misc import SUDOERS
-from AloneX.utils.database import add_gban_user, remove_gban_user
-from AloneX.utils.decorators.language import language
+from AloneXMusic import app
+from AloneXMusic.misc import SUDOERS
+from AloneXMusic.utils.database import add_gban_user, remove_gban_user
+from AloneXMusic.utils.decorators.language import language
 
 # Command
 BLOCK_COMMAND = get_command("BLOCK_COMMAND")
