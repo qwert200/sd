@@ -7,7 +7,6 @@ from AloneXMusic import app
 from AloneXMusic.core.call import Alone
 from AloneXMusic.utils.database import is_music_playing, music_off
 from AloneXMusic.utils.decorators import AdminRightsCheck
-from AloneXMusic.utils.inline.play import close_keyboard
 
 # Commands
 PAUSE_COMMAND = get_command("PAUSE_COMMAND")
